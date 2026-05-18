@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly KAMIS_API_ID?: string;
   readonly DATABASE_URL?: string;
   readonly DIRECT_URL?: string;
+  readonly ENABLE_ADS?: string;
 }
 
 interface ImportMeta {

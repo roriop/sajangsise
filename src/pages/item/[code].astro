@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import PriceChart from '../../components/PriceChart';
 import ChangeIndicator from '../../components/ChangeIndicator';
+import AdSlot from '../../components/AdSlot.astro';
 import { getAllItems, getItemSeries } from '../../lib/data/client';
 import { CATEGORY_LABEL, type Item } from '../../lib/data/items';
 import { formatDateKor, formatPrice } from '../../lib/format';
@@ -58,6 +59,8 @@ const lastDate = last ? formatDateKor(new Date(last.date)) : '';
     <section class="rounded-lg border border-neutral-200 bg-white p-3">
       <PriceChart series={series} client:only="react" />
     </section>
+
+    <AdSlot slot="item-after-chart" className="mt-4" />
 
     <aside class="mt-6 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
       <strong class="font-semibold">Phase 0 — mock 데이터</strong>

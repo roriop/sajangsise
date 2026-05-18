@@ -1,0 +1,24 @@
+---
+export interface Props {
+  slot: string;
+  span?: 'box' | 'banner';
+  className?: string;
+}
+
+const { slot, span, className = '' } = Astro.props;
+const enabled = process.env.ENABLE_ADS === 'true';
+
+const spanClass =
+  span === 'box'
+    ? 'col-span-2 sm:col-span-3 md:col-span-2 lg:col-span-2 xl:col-span-2'
+    : span === 'banner'
+      ? 'col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6'
+      : '';
+---
+<aside
+  class:list={['ad-slot', !enabled && 'hidden', spanClass, className]}
+  data-slot={slot}
+  aria-label="광고"
+>
+  {/* Phase 1: AdSense / Kakao 광고 코드 주입 위치 */}
+</aside>

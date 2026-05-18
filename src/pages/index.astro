@@ -2,12 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import PriceCard from '../components/PriceCard';
 import CategoryFilter from '../components/CategoryFilter';
+import AdSlot from '../components/AdSlot.astro';
 import { getAllItems, getLatestPrices } from '../lib/data/client';
 import { formatDateKor } from '../lib/format';
 
 const items = await getAllItems();
 const prices = await getLatestPrices();
 const today = formatDateKor(new Date());
+
+const AD_AFTER_INDEX = 11; // 12번째 카드 뒤에 인피드 광고
+const firstSlice = items.slice(0, AD_AFTER_INDEX + 1);
+const secondSlice = items.slice(AD_AFTER_INDEX + 1);
 ---
 <Layout title="오늘 식자재 시세 | 사장시세">
   <main class="mx-auto w-full max-w-screen-xl px-4 pt-4 pb-12 flex-1">
@@ -19,7 +24,17 @@ const today = formatDateKor(new Date());
     <CategoryFilter client:load />
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 mt-3">
-      {items.map((item) => {
+      {firstSlice.map((item) => {
+        const p = prices.get(item.code);
+        if (!p) return null;
+        return (
+          <div data-category={item.category}>
+            <PriceCard item={item} current={p.current} previous={p.previous} />
+          </div>
+        );
+      })}
+      <AdSlot slot="home-grid-mid" span="box" />
+      {secondSlice.map((item) => {
         const p = prices.get(item.code);
         if (!p) return null;
         return (
@@ -29,6 +44,8 @@ const today = formatDateKor(new Date());
         );
       })}
     </div>
+
+    <AdSlot slot="home-grid-bottom" span="banner" className="mt-4" />
 
     <p class="text-[11px] text-neutral-400 mt-6">
       Phase 0 — mock 데이터로 운영 중. KAMIS Open API 키 발급 후 실제 데이터로 전환합니다.
