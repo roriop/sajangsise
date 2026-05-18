@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>og</title>
+    <!--
+      og-image source. Not a real page — used to render /og-image.png at 1200x630.
+      Regen: `npm run og:gen` (browse가 screenshot 캡처).
+    -->
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        background: #fafafa;
+        color: #171717;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        padding: 64px 80px;
+      }
+      .left h1 { font-size: 96px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 18px; }
+      .left h1 .brand { color: #15803d; }
+      .left .tag { font-size: 32px; color: #404040; font-weight: 500; line-height: 1.35; margin-bottom: 24px; }
+      .left .meta { font-size: 18px; color: #737373; font-weight: 400; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding-left: 32px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 110px;
+      }
+      .card .name { font-size: 18px; font-weight: 600; }
+      .card .unit { font-size: 12px; color: #737373; margin-top: 2px; }
+      .card .price { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 8px; }
+      .card .price .won { font-size: 14px; font-weight: 400; color: #737373; margin-left: 2px; }
+      .card .ch { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+      .card .up { color: #dc2626; }
+      .card .down { color: #16a34a; }
+    </style>
+  </head>
+  <body>
+    <div class="left">
+      <h1><span class="brand">사장</span>시세</h1>
+      <p class="tag">매일 아침 30초,<br/>오늘 식자재 시세.</p>
+      <p class="meta">KAMIS · 50개 핵심 품목 · 1년 추이 차트</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div><div class="name">배추</div><div class="unit">1포기</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div class="price">2,311<span class="won">원</span></div>
+          <div class="ch up">▲ 0.1%</div>
+        </div>
+      </div>
+      <div class="card">
+        <div><div class="name">양파</div><div class="unit">1kg</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div class="price">1,475<span class="won">원</span></div>
+          <div class="ch down">▼ 1.4%</div>
+        </div>
+      </div>
+      <div class="card">
+        <div><div class="name">대파</div><div class="unit">1kg</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div class="price">2,807<span class="won">원</span></div>
+          <div class="ch up">▲ 2.5%</div>
+        </div>
+      </div>
+      <div class="card">
+        <div><div class="name">삼겹살</div><div class="unit">1kg</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div class="price">26,693<span class="won">원</span></div>
+          <div class="ch down">▼ 0.5%</div>
+        </div>
+      </div>
+      <div class="card">
+        <div><div class="name">계란</div><div class="unit">30개</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div class="price">8,673<span class="won">원</span></div>
+          <div class="ch up">▲ 1.1%</div>
+        </div>
+      </div>
+      <div class="card">
+        <div><div class="name">고등어</div><div class="unit">1kg</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div class="price">11,096<span class="won">원</span></div>
+          <div class="ch down">▼ 0.8%</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
