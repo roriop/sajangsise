@@ -5,8 +5,6 @@ interface ImportMetaEnv {
   readonly USE_KAMIS_MOCK?: string;
   readonly KAMIS_API_KEY?: string;
   readonly KAMIS_API_ID?: string;
-  readonly DATABASE_URL?: string;
-  readonly DIRECT_URL?: string;
   readonly ENABLE_ADS?: string;
 }
 
