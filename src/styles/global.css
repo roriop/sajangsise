@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-neutral-50 text-neutral-900;
+}
+
+/* 가격은 항상 등폭 숫자 */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

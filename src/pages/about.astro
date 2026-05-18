@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="소개 | 사장시세" description="사장시세 서비스 소개와 데이터 출처.">
+  <main class="mx-auto w-full max-w-screen-md px-4 py-8 flex-1 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold tracking-tight mb-3">사장시세란?</h1>
+      <p class="text-neutral-700 leading-relaxed">
+        식당 사장님이 매일 아침 30초 만에 오늘 식자재 시세를 확인할 수 있도록 만든 작은 도구입니다.
+        50개 핵심 식자재의 도매·소매가를 한 화면에서, 1년 추이까지 한 번에 봅니다.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-2">왜 만들었나요?</h2>
+      <p class="text-neutral-700 leading-relaxed">
+        식당 운영의 첫 변수는 식자재 원가입니다. KAMIS, 마트 앱, 시장 시세, 통신사 뉴스 —
+        정보는 흩어져 있고 모바일로 한눈에 보기 어렵습니다. 사장시세는 <strong>"지금 사야 하나, 미뤄야 하나"</strong>의 판단만 빠르게 도와주는 데 집중합니다.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-2">데이터 출처</h2>
+      <ul class="list-disc pl-5 text-neutral-700 space-y-1">
+        <li>
+          주요 데이터:
+          <a class="underline hover:text-neutral-900" href="https://www.kamis.or.kr" target="_blank" rel="noopener noreferrer">
+            농산물유통정보(KAMIS) Open API
+          </a>
+        </li>
+        <li>(예정) 가공식품 가격: 한국소비자원 참가격</li>
+      </ul>
+      <p class="text-sm text-neutral-500 mt-3 leading-relaxed">
+        현재는 <strong>Phase 0 — mock 데이터</strong>로 운영되고 있으며, KAMIS API 키 발급 후 실제 데이터로 전환합니다.
+        모든 페이지 하단에 데이터 출처를 항상 표시합니다.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-2">회원가입은요?</h2>
+      <p class="text-neutral-700 leading-relaxed">
+        없습니다. 즐겨찾기는 브라우저(localStorage)에 저장되며, 가격 알림 같은 기능이 필요해질 때
+        선택적으로 도입할 예정입니다.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-2">피드백</h2>
+      <p class="text-neutral-700 leading-relaxed">
+        의견과 추가하고 싶은 품목 제안을 기다립니다. 운영자 연락처는 곧 추가합니다.
+      </p>
+    </section>
+  </main>
+</Layout>

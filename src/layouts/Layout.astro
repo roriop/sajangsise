@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = '식당 사장님이 매일 아침 30초 만에 확인하는 오늘의 식자재 시세. KAMIS 출처.',
+  ogImage = '/og-image.png',
+} = Astro.props;
+
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).toString()
+  : Astro.url.toString();
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="사장시세" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans">
+    <header class="border-b border-neutral-200 bg-white sticky top-0 z-10">
+      <div class="mx-auto max-w-screen-md px-4 py-3 flex items-center justify-between">
+        <a href="/" class="font-bold text-lg tracking-tight">
+          <span class="text-green-700">사장</span>시세
+        </a>
+        <nav class="flex gap-4 text-sm text-neutral-600">
+          <a href="/about" class="hover:text-neutral-900">소개</a>
+          <a href="/roadmap" class="hover:text-neutral-900">로드맵</a>
+        </nav>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer class="mt-12 border-t border-neutral-200 bg-white">
+      <div class="mx-auto max-w-screen-md px-4 py-6 text-xs text-neutral-500 space-y-1">
+        <p>
+          가격 정보 출처: <strong class="font-semibold">농산물유통정보(KAMIS)</strong> ·
+          <a class="underline hover:text-neutral-700" href="https://www.kamis.or.kr" target="_blank" rel="noopener noreferrer">www.kamis.or.kr</a>
+        </p>
+        <p>본 사이트는 KAMIS Open API 데이터를 가공하여 제공하며, 원자료의 정확성을 보증하지 않습니다.</p>
+        <p class="pt-1">© 2026 사장시세 · <a href="/about" class="underline hover:text-neutral-700">소개</a> · <a href="/roadmap" class="underline hover:text-neutral-700">로드맵</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

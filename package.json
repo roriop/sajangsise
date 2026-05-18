@@ -1,0 +1,32 @@
+{
+  "name": "sajangsise",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "식당 사장님이 매일 아침 30초 만에 오늘 식자재 시세를 확인하는 도구",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.6.2",
+    "@astrojs/tailwind": "^5.1.2",
+    "astro": "^4.16.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.13.3",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@prisma/client": "^5.22.0",
+    "@types/node": "^22.19.19",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "prisma": "^5.22.0",
+    "typescript": "^5.7.2"
+  }
+}

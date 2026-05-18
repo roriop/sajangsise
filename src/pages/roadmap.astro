@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="로드맵 | 사장시세" description="사장시세의 출시 예정 기능과 진행 상황.">
+  <main class="mx-auto w-full max-w-screen-md px-4 py-8 flex-1 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold tracking-tight mb-2">로드맵</h1>
+      <p class="text-sm text-neutral-500">우선순위는 사용자 피드백에 따라 바뀝니다.</p>
+    </section>
+
+    <section>
+      <div class="flex items-baseline gap-2 mb-2">
+        <h2 class="text-lg font-bold">Phase 0 — 라이브 사이트 띄우기</h2>
+        <span class="text-xs text-green-700 font-medium">진행 중</span>
+      </div>
+      <ul class="list-disc pl-5 text-neutral-700 space-y-1">
+        <li>50개 핵심 품목 카드 그리드 (mock 데이터)</li>
+        <li>품목별 1년 추이 차트</li>
+        <li>소개, 로드맵 페이지</li>
+        <li>Vercel 배포 및 도메인 연결</li>
+        <li>KAMIS Open API 신청용 검증 자료 확보</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-2">Phase 1 — KAMIS 실데이터 전환</h2>
+      <ul class="list-disc pl-5 text-neutral-700 space-y-1">
+        <li>KAMIS Open API 연동</li>
+        <li>매일 18:00 KST cron 수집 → Supabase Postgres 저장</li>
+        <li>Mock → Real 환경변수 스위치 전환</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-2">Phase 2 — 베타 오픈</h2>
+      <ul class="list-disc pl-5 text-neutral-700 space-y-1">
+        <li>즐겨찾기 (localStorage 기반, 회원가입 없음)</li>
+        <li>가격 변동 알림 (이메일 또는 PWA push)</li>
+        <li>메뉴 원가 계산기</li>
+        <li>주간 시세 요약 페이지</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-2">이후 (검토 중)</h2>
+      <ul class="list-disc pl-5 text-neutral-700 space-y-1">
+        <li>지역별 가격 비교</li>
+        <li>가공식품 시세 (한국소비자원 참가격)</li>
+        <li>식자재 마트 정보 비교</li>
+      </ul>
+    </section>
+  </main>
+</Layout>
