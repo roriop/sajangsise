@@ -15,7 +15,7 @@ export default function CategoryFilter() {
   }, [active]);
 
   const baseBtn =
-    'px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors';
+    'inline-flex items-center justify-center min-h-11 px-4 rounded-full text-sm font-medium whitespace-nowrap transition-colors';
 
   return (
     <div className="-mx-4 overflow-x-auto" role="tablist" aria-label="카테고리 필터">
