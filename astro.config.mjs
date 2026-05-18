@@ -8,4 +8,5 @@ export default defineConfig({
     react(),
     tailwind({ applyBaseStyles: false }),
   ],
+  devToolbar: { enabled: false },
 });
