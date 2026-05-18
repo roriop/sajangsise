@@ -10,7 +10,7 @@ const prices = await getLatestPrices();
 const today = formatDateKor(new Date());
 ---
 <Layout title="오늘 식자재 시세 | 사장시세">
-  <main class="mx-auto w-full max-w-screen-md px-4 pt-4 pb-12 flex-1">
+  <main class="mx-auto w-full max-w-screen-xl px-4 pt-4 pb-12 flex-1">
     <section class="mb-4">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">오늘 식자재 시세</h1>
       <p class="text-sm text-neutral-500 mt-1 tabular-nums">{today} · 어제 대비 소매가</p>
@@ -18,7 +18,7 @@ const today = formatDateKor(new Date());
 
     <CategoryFilter client:load />
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mt-3">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 mt-3">
       {items.map((item) => {
         const p = prices.get(item.code);
         if (!p) return null;
