@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   CartesianGrid,
   Line,
@@ -16,6 +16,15 @@ type Props = { series: PricePoint[] };
 
 export default function PriceChart({ series }: Props) {
   const [mode, setMode] = useState<Mode>('retail');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   const chartData = useMemo(
     () => series.map((p) => ({ date: p.date, value: mode === 'retail' ? p.retail : p.wholesale })),
@@ -25,8 +34,13 @@ export default function PriceChart({ series }: Props) {
   const minPrice = useMemo(() => Math.min(...chartData.map((d) => d.value)), [chartData]);
   const maxPrice = useMemo(() => Math.max(...chartData.map((d) => d.value)), [chartData]);
 
-  const btnBase = 'px-3 py-1 rounded text-sm font-medium transition-colors';
+  const btnBase = 'inline-flex items-center justify-center min-h-11 px-4 rounded text-sm font-medium transition-colors';
   const stroke = mode === 'retail' ? '#16a34a' : '#0ea5e9';
+
+  const xTickInterval = isMobile ? 60 : 29;
+  const xTickFormatter = isMobile
+    ? (d: string) => `${d.slice(5, 7)}월`
+    : (d: string) => d.slice(5).replace('-', '/');
 
   return (
     <div className="w-full">
@@ -62,11 +76,12 @@ export default function PriceChart({ series }: Props) {
             <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="date"
-              tickFormatter={(d: string) => d.slice(5).replace('-', '/')}
-              interval={29}
+              tickFormatter={xTickFormatter}
+              interval={xTickInterval}
               fontSize={10}
               stroke="#9ca3af"
               tickLine={false}
+              minTickGap={isMobile ? 16 : 8}
             />
             <YAxis
               tickFormatter={(v: number) => v.toLocaleString('ko-KR')}
