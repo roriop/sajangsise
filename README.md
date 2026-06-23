@@ -14,10 +14,13 @@ npm run dev            # http://localhost:4321
 
 | 명령 | 설명 |
 | --- | --- |
-| `npm run dev` | 개발 서버 |
+| `npm run dev` | 개발 서버 (Astro 7부터 백그라운드 데몬으로 실행) |
 | `npm run build` | 정적 빌드 → `dist/` |
 | `npm run preview` | 빌드 결과 미리보기 |
 | `npm run typecheck` | `astro check` (TypeScript + Astro 타입 검사) |
+
+> Astro 7의 `astro dev`는 백그라운드 데몬으로 동작합니다.
+> 상태/중지/로그: `npx astro dev status` · `npx astro dev stop` · `npx astro dev logs`
 
 ## OG 이미지 재생성
 

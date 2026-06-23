@@ -12,7 +12,7 @@
 - 로딩 스피너 2초 이상 X.
 
 ## 기술 스택
-- Astro 4 + React (island 패턴)
+- Astro 7 + React (island 패턴)
 - TypeScript strict
 - Tailwind CSS
 - Recharts
@@ -41,8 +41,7 @@ sajangsise/
 ├── CLAUDE.md
 ├── README.md
 ├── .env.example
-├── astro.config.mjs
-├── tailwind.config.mjs
+├── astro.config.mjs               # Tailwind 4 = @tailwindcss/vite 플러그인 (tailwind.config 없음)
 ├── tsconfig.json
 ├── package.json
 ├── data/                          # Phase 1 추가 — JSONL 또는 SQLite 가격 시계열
@@ -70,7 +69,7 @@ sajangsise/
 │   │   │   └── kamis.ts           # Phase 1 — KAMIS Open API
 │   │   └── format.ts
 │   └── styles/
-│       └── global.css
+│       └── global.css            # @import "tailwindcss" + @theme (커스텀 색/폰트)
 └── public/
     ├── favicon.svg
     └── og-image.png               # TODO
