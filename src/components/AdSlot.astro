@@ -8,11 +8,12 @@ export interface Props {
 const { slot, span, className = '' } = Astro.props;
 const enabled = process.env.ENABLE_ADS === 'true';
 
+// 그리드는 모바일 2열 / md+ 5열
 const spanClass =
   span === 'box'
-    ? 'col-span-2 sm:col-span-3 md:col-span-2 lg:col-span-2 xl:col-span-2'
+    ? 'col-span-2 md:col-span-2'
     : span === 'banner'
-      ? 'col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-5 xl:col-span-6'
+      ? 'col-span-2 md:col-span-5'
       : '';
 ---
 <aside

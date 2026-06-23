@@ -23,7 +23,7 @@ const secondSlice = items.slice(AD_AFTER_INDEX + 1);
 
     <CategoryFilter client:load />
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 mt-3">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-3">
       {firstSlice.map((item) => {
         const p = prices.get(item.code);
         if (!p) return null;
