@@ -17,7 +17,7 @@
 - Tailwind CSS
 - Recharts
 - 데이터 영속화: **외부 서비스 없음**. Phase 1에서 JSONL 파일 또는 SQLite 중 결정 (둘 다 git/객체 스토리지 기반, 매니지드 DB 미사용)
-- Vercel 배포 (Hobby) + GitHub Actions (cron)
+- Cloudflare Pages 배포 (무료 플랜 = 광고 포함 상업적 이용 허용) + GitHub Actions (cron)
 
 ## 데이터 소스
 - 1차: KAMIS Open-API (가격) — API 키 신청 중, 도착 전 mock 사용
@@ -88,12 +88,12 @@ sajangsise/
 2. 품목 상세: 1년 추이 차트 (mock)
 3. About 페이지: 서비스 소개 + KAMIS 출처 표시
 4. Roadmap 페이지: 출시 예정 기능
-5. Vercel 배포 + 도메인 연결
+5. Cloudflare Pages 배포 + 도메인 연결
 
 ## Phase 1 (API 키 도착 후)
 - 데이터 저장 방식 결정 (JSONL `data/prices.jsonl` vs SQLite `data/prices.db`)
 - GH Actions 매일 18:00 KST cron → KAMIS fetch → 새 일자 append → git commit + push
-- Vercel 자동 재빌드 → 새 데이터로 SSG
+- Cloudflare Pages 자동 재빌드 → 새 데이터로 SSG
 - `src/lib/data/kamis.ts` 또는 `jsonl.ts` 구현, `client.ts`에서 분기
 - 광고 코드 도입: `ENABLE_ADS=true` 빌드 환경변수로 슬롯 활성화 (AdSense 또는 카카오)
 
@@ -129,5 +129,5 @@ About/Roadmap 페이지는 광고 금지 (prose + 저트래픽).
 - 차트: Recharts, 모바일 격월(60일 interval) / 데스크탑 매월(29일 interval) 자동 분기
 
 ## 비용 목표
-- 월 운영비 ≈ ₩0 (KAMIS 무료 + Vercel Hobby + GH Actions 무료 분 + 도메인만 유료)
+- 월 운영비 ≈ ₩0 (KAMIS 무료 + Cloudflare Pages 무료(상업 이용 허용) + GH Actions 무료 분 + 도메인만 유료)
 - 외부 매니지드 DB 없음 (Supabase, Turso 등 도입 시 재검토)
