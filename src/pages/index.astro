@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import PriceCard from '../components/PriceCard';
 import CategoryFilter from '../components/CategoryFilter';
 import AdSlot from '../components/AdSlot.astro';
-import { getAllItems, getLatestPrices } from '../lib/data/client';
+import { getAllItems, getLatestPrices, usingMock } from '../lib/data/client';
 import { formatDateKor } from '../lib/format';
 
 const items = await getAllItems();
@@ -48,7 +48,9 @@ const secondSlice = items.slice(AD_AFTER_INDEX + 1);
     <AdSlot slot="home-grid-bottom" span="banner" className="mt-4" />
 
     <p class="text-[11px] text-neutral-400 mt-6">
-      Phase 0 — mock 데이터로 운영 중. KAMIS Open API 키 발급 후 실제 데이터로 전환합니다.
+      {usingMock
+        ? 'Phase 0 — mock 데이터로 운영 중. KAMIS Open API 키 발급 후 실제 데이터로 전환합니다.'
+        : '가격 출처: KAMIS Open API 일별 품목별 소매가격(전국 평균). 매일 18시 갱신.'}
     </p>
   </main>
 </Layout>

@@ -25,8 +25,17 @@
 - 출처 표시 의무: 푸터 + About 페이지 명시
 
 ## Mock / Real 스위치
-- `process.env.USE_KAMIS_MOCK === 'true'` → mock
-- 컴포넌트는 데이터 출처 모름. `src/lib/data/client.ts`만 분기.
+- `process.env.USE_KAMIS_MOCK === 'true'` → mock, `=== 'false'` → 실데이터(JSONL store).
+- 컴포넌트는 데이터 출처 모름. `src/lib/data/client.ts`만 분기 (`usingMock` export로 안내 문구 분기).
+- 실데이터 진입점은 `store.ts`(빌드 시 `data/prices.jsonl` 읽음). KAMIS API는 빌드가 아닌 cron 스크립트만 호출.
+
+## 데이터 결정 (Phase 1 확정)
+- **저장: JSONL** (`data/prices.jsonl`, 한 줄=`{date,code,retail}`). SQLite 미채택.
+- **소매가 단독.** KAMIS 도매·소매는 단위 체계가 달라(소매 1포기 vs 도매 1망) 한 카드에 못 묶음.
+- **수집: periodProductList(소매)** 1년치 — 채소·수산·과일·곡물. 축산물(축평원)은 periodProductList가 무응답이라 `dailyPriceByCategoryList`의 dpr1~6으로 시드 + 매일 누적.
+- 품목→코드 매핑: `data/kamis-codes.json` (`scripts/resolve-codes.mjs` 생성). 단위도 여기서 가져와 store가 덮어씀.
+- KAMIS 일별 미수록(가공식품·오리·제철) 12품목은 실데이터에서 자동 숨김 → 38품목 노출.
+- 운영 절차: `docs/kamis-operations.md`.
 
 ## Blast Radius
 - API 키, 비밀값은 `.env*`만. 절대 커밋 X.

@@ -11,11 +11,9 @@ import {
 import type { PricePoint } from '../lib/data/items';
 import { formatPrice } from '../lib/format';
 
-type Mode = 'retail' | 'wholesale';
 type Props = { series: PricePoint[] };
 
 export default function PriceChart({ series }: Props) {
-  const [mode, setMode] = useState<Mode>('retail');
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -27,15 +25,14 @@ export default function PriceChart({ series }: Props) {
   }, []);
 
   const chartData = useMemo(
-    () => series.map((p) => ({ date: p.date, value: mode === 'retail' ? p.retail : p.wholesale })),
-    [series, mode],
+    () => series.map((p) => ({ date: p.date, value: p.retail })),
+    [series],
   );
 
   const minPrice = useMemo(() => Math.min(...chartData.map((d) => d.value)), [chartData]);
   const maxPrice = useMemo(() => Math.max(...chartData.map((d) => d.value)), [chartData]);
 
-  const btnBase = 'inline-flex items-center justify-center min-h-11 px-4 rounded text-sm font-medium transition-colors';
-  const stroke = mode === 'retail' ? '#16a34a' : '#0ea5e9';
+  const stroke = '#16a34a';
 
   const xTickInterval = isMobile ? 60 : 29;
   const xTickFormatter = isMobile
@@ -45,26 +42,7 @@ export default function PriceChart({ series }: Props) {
   return (
     <div className="w-full">
       <div className="mb-3 flex items-center justify-between gap-2">
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => setMode('retail')}
-            className={`${btnBase} ${
-              mode === 'retail' ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-700'
-            }`}
-          >
-            소매가
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode('wholesale')}
-            className={`${btnBase} ${
-              mode === 'wholesale' ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-700'
-            }`}
-          >
-            도매가
-          </button>
-        </div>
+        <span className="text-sm font-medium text-neutral-700">소매가 추이</span>
         <div className="text-xs text-neutral-500 tabular-nums hidden sm:block">
           최저 {formatPrice(minPrice)} · 최고 {formatPrice(maxPrice)}
         </div>
@@ -95,7 +73,7 @@ export default function PriceChart({ series }: Props) {
             <Tooltip
               contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e5e7eb' }}
               labelFormatter={(d) => `${d}`}
-              formatter={(value: number) => [`${formatPrice(value)}원`, mode === 'retail' ? '소매가' : '도매가']}
+              formatter={(value: number) => [`${formatPrice(value)}원`, '소매가']}
             />
             <Line
               type="monotone"
