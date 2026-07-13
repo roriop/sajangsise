@@ -4,15 +4,30 @@ import PriceCard from '../components/PriceCard';
 import CategoryFilter from '../components/CategoryFilter';
 import AdSlot from '../components/AdSlot.astro';
 import { getAllItems, getLatestPrices, usingMock } from '../lib/data/client';
+import { CATEGORIES } from '../lib/data/items';
 import { formatDateKor } from '../lib/format';
 
 const items = await getAllItems();
 const prices = await getLatestPrices();
 const today = formatDateKor(new Date());
 
+// 실제 가격이 있는 품목만 노출 (실데이터에서 KAMIS 미수록 품목은 빠짐).
+const visibleItems = items.filter((item) => prices.has(item.code));
+
+// 데이터가 있는 카테고리만, CATEGORIES 순서대로 개수와 함께.
+const countByCategory = new Map<string, number>();
+for (const item of visibleItems) {
+  countByCategory.set(item.category, (countByCategory.get(item.category) ?? 0) + 1);
+}
+const activeCategories = CATEGORIES.filter((c) => countByCategory.has(c.value)).map((c) => ({
+  value: c.value,
+  label: c.label,
+  count: countByCategory.get(c.value) ?? 0,
+}));
+
 const AD_AFTER_INDEX = 11; // 12번째 카드 뒤에 인피드 광고
-const firstSlice = items.slice(0, AD_AFTER_INDEX + 1);
-const secondSlice = items.slice(AD_AFTER_INDEX + 1);
+const firstSlice = visibleItems.slice(0, AD_AFTER_INDEX + 1);
+const secondSlice = visibleItems.slice(AD_AFTER_INDEX + 1);
 ---
 <Layout title="오늘 식자재 시세 | 사장시세">
   <main class="mx-auto w-full max-w-screen-xl px-4 pt-4 pb-12 flex-1">
@@ -21,12 +36,11 @@ const secondSlice = items.slice(AD_AFTER_INDEX + 1);
       <p class="text-sm text-neutral-500 mt-1 tabular-nums">{today} · 어제 대비 소매가</p>
     </section>
 
-    <CategoryFilter client:load />
+    <CategoryFilter categories={activeCategories} total={visibleItems.length} client:load />
 
     <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-3">
       {firstSlice.map((item) => {
-        const p = prices.get(item.code);
-        if (!p) return null;
+        const p = prices.get(item.code)!;
         return (
           <div data-category={item.category}>
             <PriceCard item={item} current={p.current} previous={p.previous} />
@@ -35,8 +49,7 @@ const secondSlice = items.slice(AD_AFTER_INDEX + 1);
       })}
       <AdSlot slot="home-grid-mid" span="box" />
       {secondSlice.map((item) => {
-        const p = prices.get(item.code);
-        if (!p) return null;
+        const p = prices.get(item.code)!;
         return (
           <div data-category={item.category}>
             <PriceCard item={item} current={p.current} previous={p.previous} />
