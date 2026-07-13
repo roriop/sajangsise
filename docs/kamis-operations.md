@@ -15,7 +15,8 @@ src/lib/data/store.ts → SSG → sajangsise.com
 - **소매가 단독.** KAMIS 도매·소매는 단위 체계가 달라(배추 소매 1포기 vs 도매 1망) 한 카드에 못 묶음 → 소매(cls=01)만 수집·표시.
 - **단위 출처**: `data/kamis-codes.json`의 `unit` (예: 삼겹살 100g, 사과 10개). store.ts가 빌드 시 품목 unit을 이 값으로 덮어씀.
 - **전국 평균** (`p_countrycode` 비움 → countyname "평균").
-- KAMIS 일별 미수록 12품목(가공식품·오리·제철)은 홈에서 자동 숨김 → 실데이터 38품목 노출.
+- KAMIS 일별 미수록 12품목(가공식품·오리·제철)은 홈에서 자동 숨김 → 실데이터 89품목 노출 (2026-07-13 KAMIS 수록 전 품목으로 확장, 정의 101).
+- `resolve-codes.mjs`는 기존 `kamis-codes.json` 매핑을 보존하고 미해석 품목만 새로 해석 (계절 품종 뒤바뀜 방지). 전체 재해석은 `--force`.
 
 ## 스크립트
 

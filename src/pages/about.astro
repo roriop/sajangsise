@@ -1,5 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getAllItems, getLatestPrices, usingMock } from '../lib/data/client';
+
+const items = await getAllItems();
+const prices = await getLatestPrices();
+const itemCount = items.filter((i) => prices.has(i.code)).length;
 ---
 <Layout title="소개 | 사장시세" description="사장시세 서비스 소개와 데이터 출처.">
   <main class="mx-auto w-full max-w-screen-md px-4 py-8 flex-1 space-y-8">
@@ -7,7 +12,7 @@ import Layout from '../layouts/Layout.astro';
       <h1 class="text-2xl font-bold tracking-tight mb-3">사장시세란?</h1>
       <p class="text-neutral-700 leading-relaxed">
         식당 사장님이 매일 아침 30초 만에 오늘 식자재 시세를 확인할 수 있도록 만든 작은 도구입니다.
-        50개 핵심 식자재의 도매·소매가를 한 화면에서, 1년 추이까지 한 번에 봅니다.
+        {itemCount}개 핵심 식자재의 소매가를 한 화면에서, 1년 추이까지 한 번에 봅니다.
       </p>
     </section>
 
@@ -31,7 +36,9 @@ import Layout from '../layouts/Layout.astro';
         <li>(예정) 가공식품 가격: 한국소비자원 참가격</li>
       </ul>
       <p class="text-sm text-neutral-500 mt-3 leading-relaxed">
-        현재는 <strong>Phase 0 — mock 데이터</strong>로 운영되고 있으며, KAMIS API 키 발급 후 실제 데이터로 전환합니다.
+        {usingMock
+          ? '현재는 Phase 0 — mock 데이터로 운영되고 있으며, KAMIS API 키 발급 후 실제 데이터로 전환합니다.'
+          : 'KAMIS Open API의 일별 품목별 소매가격(전국 평균)을 매일 저녁 수집해 반영합니다.'}
         모든 페이지 하단에 데이터 출처를 항상 표시합니다.
       </p>
     </section>

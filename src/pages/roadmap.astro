@@ -11,23 +11,25 @@ import Layout from '../layouts/Layout.astro';
     <section>
       <div class="flex items-baseline gap-2 mb-2">
         <h2 class="text-lg font-bold">Phase 0 — 라이브 사이트 띄우기</h2>
-        <span class="text-xs text-green-700 font-medium">진행 중</span>
+        <span class="text-xs text-green-700 font-medium">완료</span>
       </div>
       <ul class="list-disc pl-5 text-neutral-700 space-y-1">
-        <li>50개 핵심 품목 카드 그리드 (mock 데이터)</li>
+        <li>핵심 품목 카드 그리드</li>
         <li>품목별 1년 추이 차트</li>
         <li>소개, 로드맵 페이지</li>
         <li>Cloudflare Pages 배포 및 도메인 연결</li>
-        <li>KAMIS Open API 신청용 검증 자료 확보</li>
       </ul>
     </section>
 
     <section>
-      <h2 class="text-lg font-bold mb-2">Phase 1 — KAMIS 실데이터 전환</h2>
+      <div class="flex items-baseline gap-2 mb-2">
+        <h2 class="text-lg font-bold">Phase 1 — KAMIS 실데이터 전환</h2>
+        <span class="text-xs text-green-700 font-medium">완료</span>
+      </div>
       <ul class="list-disc pl-5 text-neutral-700 space-y-1">
-        <li>KAMIS Open API 연동</li>
-        <li>매일 18:00 KST cron 수집 → Supabase Postgres 저장</li>
-        <li>Mock → Real 환경변수 스위치 전환</li>
+        <li>KAMIS Open API 연동 (일별 소매가, 전국 평균)</li>
+        <li>매일 저녁 자동 수집 → 새 데이터로 사이트 재빌드</li>
+        <li>KAMIS 일별 수록 전 품목으로 확장 (채소·축산·수산·곡물·조미료·과일)</li>
       </ul>
     </section>
 

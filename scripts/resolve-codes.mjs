@@ -4,7 +4,9 @@
 // dailyPriceByCategoryList(부류별) 응답에 item_code/kind_code/rank_code 가 들어있으므로,
 // 품목명 매칭으로 코드를 뽑아낸다. 이 코드는 periodProductList(품목별 1년치)에 사용.
 //
-// 사용법: node scripts/resolve-codes.mjs [regday]   (default 어제 KST)
+// 사용법: node scripts/resolve-codes.mjs [regday] [--force]   (default 어제 KST)
+//   기존 data/kamis-codes.json 의 매핑은 보존하고 미해석 품목만 새로 해석한다.
+//   (재해석하면 계절 품종이 바뀌어 시계열 정체성이 흔들림) --force 로 전체 재해석.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { OUR_ITEMS, OVERRIDE, KAMIS_CATEGORIES, rankScore } from './kamis-items.mjs';
@@ -24,7 +26,16 @@ if (!KEY || !ID) { console.error('✗ KAMIS 자격증명 누락'); process.exit(
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const isoKST = (off = 1) => new Date(Date.now() + 9 * 3600000 - off * 86400000).toISOString().slice(0, 10);
-const regday = process.argv[2] ?? isoKST(1);
+const cliArgs = process.argv.slice(2);
+const force = cliArgs.includes('--force');
+const regday = cliArgs.find((a) => !a.startsWith('--')) ?? isoKST(1);
+
+// 기존 매핑 보존 (--force 시 무시)
+const OUT_PATH = new URL('../data/kamis-codes.json', import.meta.url);
+let existing = {};
+if (!force) {
+  try { existing = JSON.parse(readFileSync(OUT_PATH, 'utf8')); } catch {}
+}
 
 // item_name → [{cat, row}]
 const index = new Map();
@@ -52,7 +63,9 @@ for (const cat of KAMIS_CATEGORIES) {
 
 const codes = {};
 const unmatched = [];
+let kept = 0;
 for (const [code, name] of OUR_ITEMS) {
+  if (existing[code]) { codes[code] = existing[code]; kept += 1; continue; }
   const o = OVERRIDE[code] ?? {};
   const itemname = o.item ?? name;
   let cands = index.get(itemname);
@@ -77,11 +90,13 @@ for (const [code, name] of OUR_ITEMS) {
   };
 }
 
-const out = new URL('../data/kamis-codes.json', import.meta.url);
-writeFileSync(out, JSON.stringify(codes, null, 2) + '\n');
-console.log(`✓ ${Object.keys(codes).length}/50 품목 코드 해석 → data/kamis-codes.json`);
+writeFileSync(OUT_PATH, JSON.stringify(codes, null, 2) + '\n');
+console.log(
+  `✓ ${Object.keys(codes).length}/${OUR_ITEMS.length} 품목 코드 해석(기존 유지 ${kept}) → data/kamis-codes.json`,
+);
 for (const [code, c] of Object.entries(codes)) {
-  console.log(`  ${code.padEnd(11)} ${c.cat}/${c.item}/${c.kind}/${c.rank}  ${c.kamis}  [${c.unit}]`);
+  const mark = existing[code] ? '=' : '+';
+  console.log(`  ${mark} ${code.padEnd(11)} ${c.cat}/${c.item}/${c.kind}/${c.rank}  ${c.kamis}  [${c.unit}]`);
 }
 if (unmatched.length) {
   console.log(`\n미해석(${unmatched.length}) — KAMIS 일별 미수록 또는 제철:`);
