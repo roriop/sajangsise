@@ -16,6 +16,7 @@ const {
 const canonical = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : Astro.url.toString();
+const ogImageAbs = Astro.site ? new URL(ogImage, Astro.site).toString() : ogImage;
 ---
 <!doctype html>
 <html lang="ko">
@@ -31,12 +32,13 @@ const canonical = Astro.site
     <meta property="og:site_name" content="사장시세" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageAbs} />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <slot name="head" />
   </head>
   <body class="min-h-screen flex flex-col font-sans">
     <header class="border-b border-neutral-200 bg-white sticky top-0 z-10">

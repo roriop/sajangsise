@@ -28,8 +28,21 @@ const activeCategories = CATEGORIES.filter((c) => countByCategory.has(c.value)).
 const AD_AFTER_INDEX = 11; // 12번째 카드 뒤에 인피드 광고
 const firstSlice = visibleItems.slice(0, AD_AFTER_INDEX + 1);
 const secondSlice = visibleItems.slice(AD_AFTER_INDEX + 1);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: '사장시세',
+  url: Astro.site ? Astro.site.toString() : 'https://sajangsise.com/',
+  description: `식당 사장님을 위한 오늘의 식자재 시세 — ${visibleItems.length}개 품목 소매가와 1년 추이. KAMIS 전국 평균 기준.`,
+  inLanguage: 'ko',
+};
 ---
-<Layout title="오늘 식자재 시세 | 사장시세">
+<Layout
+  title="오늘 식자재 시세 — 배추·삼겹살·수박 등 소매가 | 사장시세"
+  description={`오늘 식자재 가격 한눈에 — 채소·축산·수산·과일 등 ${visibleItems.length}개 품목의 소매가와 어제 대비 변동. KAMIS 전국 평균, 매일 갱신.`}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
   <main class="mx-auto w-full max-w-screen-xl px-4 pt-4 pb-12 flex-1">
     <section class="mb-4">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">오늘 식자재 시세</h1>

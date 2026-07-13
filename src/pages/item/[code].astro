@@ -3,16 +3,17 @@ import Layout from '../../layouts/Layout.astro';
 import PriceChart from '../../components/PriceChart';
 import ChangeIndicator from '../../components/ChangeIndicator';
 import AdSlot from '../../components/AdSlot.astro';
-import { getAllItems, getItemSeries, usingMock } from '../../lib/data/client';
+import { getAllItems, getItemSeries, getLatestPrices, usingMock } from '../../lib/data/client';
 import { CATEGORY_LABEL, type Item } from '../../lib/data/items';
 import { formatDateKor, formatPrice } from '../../lib/format';
 
 export async function getStaticPaths() {
   const items = await getAllItems();
-  return items.map((item) => ({
-    params: { code: item.code },
-    props: { item },
-  }));
+  const prices = await getLatestPrices();
+  // 데이터 없는 품목은 페이지 미생성 (thin content 방지 — 홈에서도 숨김이라 링크 없음)
+  return items
+    .filter((item) => prices.has(item.code))
+    .map((item) => ({ params: { code: item.code }, props: { item } }));
 }
 
 const { item } = Astro.props as { item: Item };
@@ -23,11 +24,68 @@ const prev = series.at(-2);
 const changePct =
   last && prev && prev.retail ? ((last.retail - prev.retail) / prev.retail) * 100 : 0;
 const lastDate = last ? formatDateKor(new Date(last.date)) : '';
+
+// ── SEO 요약 통계 (최근 1년 시계열 기준) ──
+const yearMin = series.length ? Math.min(...series.map((p) => p.retail)) : 0;
+const yearMax = series.length ? Math.max(...series.map((p) => p.retail)) : 0;
+// 30일 전(이전) 가장 가까운 시점 대비
+const cutoff30 = last ? new Date(new Date(last.date).getTime() - 30 * 86400000).toISOString().slice(0, 10) : '';
+const p30 = [...series].reverse().find((p) => p.date <= cutoff30);
+const change30Pct = last && p30 && p30.retail ? ((last.retail - p30.retail) / p30.retail) * 100 : null;
+
+const dirWord = (pct: number) => (pct > 0.05 ? '올랐습니다' : pct < -0.05 ? '내렸습니다' : '보합입니다');
+const pctStr = (pct: number) => `${Math.abs(pct).toFixed(1)}%`;
+
+const korDate = last
+  ? `${Number(last.date.slice(0, 4))}년 ${Number(last.date.slice(5, 7))}월 ${Number(last.date.slice(8, 10))}일`
+  : '';
+const summarySentences = last
+  ? [
+      `${korDate} 기준 ${item.name} 소매가격은 ${item.unit}당 ${formatPrice(last.retail)}원으로, 전일 대비 ${changePct === 0 ? '변동이 없습니다' : `${pctStr(changePct)} ${dirWord(changePct)}`}.`,
+      change30Pct != null ? `최근 30일 동안은 ${change30Pct === 0 ? '변동이 없었고' : `${pctStr(change30Pct)} ${change30Pct > 0 ? '상승했고' : '하락했고'}`}, 지난 1년 최저가는 ${formatPrice(yearMin)}원, 최고가는 ${formatPrice(yearMax)}원입니다.` : `지난 1년 최저가는 ${formatPrice(yearMin)}원, 최고가는 ${formatPrice(yearMax)}원입니다.`,
+      `가격은 KAMIS(농산물유통정보) 일별 소매가격 전국 평균 기준이며 매일 저녁 갱신됩니다.`,
+    ]
+  : [];
+const summary = summarySentences.join(' ');
+
+const pageTitle = last
+  ? `${item.name} 가격 시세 — 오늘 ${formatPrice(last.retail)}원 (${item.unit}) | 사장시세`
+  : `${item.name} 시세 | 사장시세`;
+const pageDescription = last
+  ? `오늘 ${item.name} 가격 ${item.unit}당 ${formatPrice(last.retail)}원 (전일 대비 ${changePct >= 0 ? '+' : ''}${changePct.toFixed(1)}%). 1년 최저 ${formatPrice(yearMin)}원 · 최고 ${formatPrice(yearMax)}원. KAMIS 전국 평균 소매가.`
+  : `${item.name}(${item.unit}) 최근 1년 가격 추이.`;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const jsonLd = last
+  ? {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Product',
+          name: item.name,
+          description: summary,
+          category: CATEGORY_LABEL[item.category],
+          offers: {
+            '@type': 'Offer',
+            price: last.retail,
+            priceCurrency: 'KRW',
+            url: canonical,
+            availability: 'https://schema.org/InStock',
+          },
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: '오늘 식자재 시세', item: new URL('/', Astro.site).toString() },
+            { '@type': 'ListItem', position: 2, name: item.name, item: canonical },
+          ],
+        },
+      ],
+    }
+  : null;
 ---
-<Layout
-  title={`${item.name} 시세 | 사장시세`}
-  description={`${item.name}(${item.unit}) 최근 1년 가격 추이.`}
->
+<Layout title={pageTitle} description={pageDescription}>
+  {jsonLd && <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />}
   <main class="mx-auto w-full max-w-screen-md px-4 py-6 flex-1">
     <a
       href="/"
@@ -59,6 +117,13 @@ const lastDate = last ? formatDateKor(new Date(last.date)) : '';
     <section class="rounded-lg border border-neutral-200 bg-white p-3">
       <PriceChart series={series} client:only="react" />
     </section>
+
+    {summary && (
+      <section class="mt-4 rounded-lg border border-neutral-200 bg-white p-4">
+        <h2 class="text-sm font-bold text-neutral-800 mb-1.5">{item.name} 시세 요약</h2>
+        <p class="text-sm text-neutral-600 leading-relaxed">{summary}</p>
+      </section>
+    )}
 
     <AdSlot slot="item-after-chart" className="mt-4" />
 
